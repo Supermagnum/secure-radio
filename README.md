@@ -31,17 +31,17 @@ USRP → RRC Filter → GDSS Despreader → PSK Demod → LDPC Decode → Decryp
 ## Requirements
 
 ### Hardware
-- An SDR transceiver capable of both RX and TX (e.g., USRP or compatible hardware). See [linux-radio.eu](https://linux-radio.eu/) for available hardware.
+- An SDR transceiver capable of both RX and TX (e.g., USRP or compatible hardware). A example is [linux-radio.eu](https://linux-radio.eu/) , very suitable when available.
 - A [Nitrokey](https://www.nitrokey.com/) hardware security module (approximately 10×15 mm) for secure key storage.
 
 ### Software
-- [GNU Radio](https://www.gnuradio.org/) (with working knowledge of flowgraph construction)
-- [gr-linux-crypto](https://github.com/Supermagnum/gr-linux-crypto/tree/master) — provides the `gr-openssl` and `gr-nacl` blocks used for encryption
+- [GNU Radio](https://www.gnuradio.org/) (with working knowledge of flowgraph construction).
+- [gr-linux-crypto](https://github.com/Supermagnum/gr-linux-crypto/tree/master) — provides the `gr-openssl` and `gr-nacl` blocks used for encryption.
 - [gr-qradiolink](https://github.com/Supermagnum/gr-qradiolink)
-- [gr-opus](https://github.com/Supermagnum/gr-opus) — Opus audio codec block for GNU Radio
+- [gr-opus](https://github.com/Supermagnum/gr-opus) — Opus audio codec block for GNU Radio.
 
 ### Optional
-- [gr-rake](https://github.com/Supermagnum/gr-rake) — RAKE receiver for improved multipath performance
+- [gr-rake](https://github.com/Supermagnum/gr-rake) — RAKE receiver for improved multipath performance.
 
 ---
 
@@ -92,7 +92,7 @@ Plug in the Nitrokey before launching GNU Radio. The crypto blocks will use it f
 
 ## Emergency Key Wipe
 
-`gr-linux-crypto` includes an emergency key-clearing feature: if the Nitrokey is physically disconnected at any point, **all cached key material is immediately and securely erased from memory**. Because the Nitrokey is small (roughly 10×15 mm), it can be quickly removed and discarded if needed. This significantly reduces the risk of key compromise under duress.
+`gr-linux-crypto` includes an emergency key-clearing feature: if the Nitrokey is physically disconnected at any point, **all cached key material is immediately and securely erased from memory**. Because the Nitrokey is small (roughly 10×15 mm), it can be quickly removed and discarded/destroyed if needed. This significantly reduces the risk of key compromise under duress.
 
 ---
 
