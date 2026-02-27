@@ -83,7 +83,7 @@ Plug in the Nitrokey before launching GNU Radio. The crypto blocks will use it f
 ## Usage
 
 1. Open GNU Radio Companion.
-2. Load the provided TX or RX flowgraph (`.grc` file) from this repository.
+2. make  TX and RX flowgraph files. (`.grc` file).
 3. Ensure your Nitrokey is connected and your SDR hardware is recognized by the system.
 4. Configure your center frequency, sample rate, and GDSS parameters to match your operating environment.
 5. Run the flowgraph.
