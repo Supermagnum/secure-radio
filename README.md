@@ -102,10 +102,7 @@ Please refer to the individual component repositories for their respective licen
 
 ---
 
-## Contributing
-
-Pull requests and issues are welcome. If you test this on hardware not listed here, please open an issue describing your setup so others can benefit.
-
+## Possible improvement 
 
 The covert stack md file lists the needed, experimental modifications to enable:
 
@@ -137,3 +134,8 @@ Before the modifications, the GDSS spreader is a signal processing block that pr
 After the modifications, the same block produces identical output on the wire, but the masking is now tied to a key that only the two endpoints hold. The receiver can strip the masking precisely because it holds the key. Nobody else can — not because the algorithm is secret, but because the key is.
 The sync burst goes from a detectable, fixed, session-independent event to a session-unique, timing-randomised, cryptographically keyed event that only the intended receiver expects.
 The key derivation wiring ensures all of this flows from a single root secret established through the existing GnuPG infrastructure, with no new key management burden on the operator.
+
+
+## Contributing
+
+Pull requests and issues are welcome. If you test this on hardware not listed here, please open an issue describing your setup so others can benefit.
