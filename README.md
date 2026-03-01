@@ -106,33 +106,41 @@ Please refer to the individual component repositories for their respective licen
 
 The covert stack md file lists the needed, experimental modifications to enable:
 
-T1 — Keyed GDSS Masking (The Core Change)
+## T1 — Keyed GDSS Masking (The Core Change)
+
 The GDSS spreader already multiplies each chip's I and Q components by the absolute value of a Gaussian random sample — that is the existing masking operation that makes the signal look like noise.
 The modification replaces where those Gaussian values come from.
 Currently they come from an internal random number generator — unseeded, or seeded arbitrarily. The change swaps that source for a ChaCha20 keystream, fed through a Box-Muller transform to produce Gaussian-distributed values. The arithmetic the block performs on the IQ samples is identical. Only the source of the masking numbers changes.
 The consequence is that the masking sequence is now:
 
-Deterministic — the receiver can reproduce it exactly
-Cryptographically keyed — nobody without the key can reproduce it
-Seekable — ChaCha20's block counter allows jumping to any position, enabling resynchronisation
+Deterministic — the receiver can reproduce it exactly.
+Cryptographically keyed — nobody without the key can reproduce it.
+Seekable — ChaCha20's block counter allows jumping to any position, enabling resynchronisation.
 
 The despreader gets the symmetric change — it generates the identical masking sequence and divides rather than multiplies, recovering the original chips.
 The Box-Muller transform is the mathematical bridge between the uniform random bytes that ChaCha20 produces and the Gaussian-distributed values that GDSS requires.
 
-T2 — Sync Burst Timing and PN Sequence
+## T2 — Sync Burst Timing and PN Sequence
+
 Two things currently have no cryptographic basis:
 The sync burst PN sequence — currently whatever the DSSS spreader defaults to. The modification derives it from the session key via ChaCha20, so it changes every session and is unknown to anyone without the key. The burst still looks like static. But now it is a session-specific static spike that only the intended receiver can recognise.
+
 When the burst is transmitted — currently fixed or predictable. The modification derives a timing offset from the keystream, so the burst arrives at a randomised but deterministically predictable time within a window. Both ends agree on the exact offset because they share the key. A passive observer sees an irregular static spike that bears no obvious relationship to any transmission schedule.
+
 The Gaussian envelope shaping is purely cosmetic — it rounds the edges of the burst so it resembles the rise-and-fall profile of natural impulse noise rather than a rectangular keyed signal.
 
-T3 — Key Derivation and Storage Wiring
+## T3 — Key Derivation and Storage Wiring.
 This is plumbing. It takes the single ECDH shared secret produced by the BrainpoolP256r1 key exchange and runs it through HKDF four times with different labels, producing four independent 32-byte keys — one for each purpose. It then stores those keys in the Linux kernel keyring so they never sit in a user-space file or Python variable during operation.
+
 The HKDF step matters because using the same key for both payload encryption and GDSS masking would be cryptographically unsound — compromise of one context could leak information about the other. Domain separation via the info labels prevents that entirely.
 
-The Net Effect of All Three Together
+## The Net Effect of All Three Together
 Before the modifications, the GDSS spreader is a signal processing block that produces noise-like output using internal randomness the receiver cannot predict. It is physically covert but cryptographically open — anyone who reverse-engineered the block could strip the masking.
+
 After the modifications, the same block produces identical output on the wire, but the masking is now tied to a key that only the two endpoints hold. The receiver can strip the masking precisely because it holds the key. Nobody else can — not because the algorithm is secret, but because the key is.
+
 The sync burst goes from a detectable, fixed, session-independent event to a session-unique, timing-randomised, cryptographically keyed event that only the intended receiver expects.
+
 The key derivation wiring ensures all of this flows from a single root secret established through the existing GnuPG infrastructure, with no new key management burden on the operator.
 
 
