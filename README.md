@@ -43,6 +43,9 @@ USRP → RRC Filter → GDSS Despreader → PSK Demod → LDPC Decode → Decryp
 ### Optional
 - [gr-rake](https://github.com/Supermagnum/gr-rake) — RAKE receiver for improved multipath performance.
 
+## Recommended read
+- https://github.com/Supermagnum/GR-K-GDSS/tree/main
+
 ---
 
 ## Installation
